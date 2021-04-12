@@ -6,7 +6,9 @@ let saveButton;
 let clearButton;
 let rotSym;
 let radSym;
-let slider;
+let reflSlider;
+let strSlider;
+let colorPicker;
 
 
 function setup() {
@@ -16,38 +18,59 @@ function setup() {
   //strokeWeight(5);
 
   clearButton = createButton('Clear');
-  clearButton.position(width / 10 - clearButton.width / 10, 970);
+  clearButton.position(width / 40 - clearButton.width / 40, 50);
   clearButton.mousePressed(clearScreen);
   clearButton.class("clearButton");
+  text('Clear screen', clearButton.x * 2 + clearButton.width, 75);
 
   saveButton = createButton('Save');
-  saveButton.position(width / 3 - saveButton.width / 3, 970);
+  saveButton.position(width / 40 - saveButton.width / 40, 100);
   saveButton.mousePressed(saveImg);
   saveButton.class("saveButton");
+  text('Save drawing', saveButton.x * 2 + saveButton.width, 125);
 
   rotationalButton = createButton('Rotational');
-  rotationalButton.position(width / 1.7 - rotationalButton.width / 1.7, 970);
+  rotationalButton.position(width / 40 - rotationalButton.width / 40, 150);
   rotationalButton.mousePressed(rotateSymmetry);
   rotationalButton.class("rotationalButton");
+  text('Use rotational symmetry', rotationalButton.x * 2 + rotationalButton.width, 175);
 
   radialButton = createButton('Radial');
-  radialButton.position(width / 1.12 - radialButton.width / 1.12, 970);
+  radialButton.position(width / 40 - radialButton.width / 40, 200);
   radialButton.mousePressed(radialSymmetry);
   radialButton.class("radialButton");
+  text('Use radial symmetry', radialButton.x * 2 + radialButton.width, 225);
 
-  slider = createSlider(2, 15, 6, 1);
+  reflSlider = createSlider(2, 15, 6, 1);
+  reflSlider.position(width / 40, 250);
+  text('Reflections', reflSlider.x * 1.5 + reflSlider.width, 265);
+
+  strSlider = createSlider(1, 5, 2, 1);
+  strSlider.position(width / 40, 270);
+  text('Brush Size', strSlider.x * 1.5 + strSlider.width, 285);
+
+  colorPicker = createColorPicker('#000000');
+  colorPicker.position(width / 40, 300);
+  colorPicker.size(40, 40);
+
+
+
+
 }
 
 function draw() {
 
-  let val = slider.value(); //
+  let col = colorPicker.color();
+  let val = reflSlider.value(); //
   let angle = 360 / val;
-  
+
+  push();
   translate(width / 2, height / 2);
   let mx = mouseX - width / 2;
   let my = mouseY - height / 2;
   let pmx = pmouseX - width / 2;
   let pmy = pmouseY - height / 2;
+  stroke(col);
 
 
   //fill('red');
@@ -58,7 +81,8 @@ function draw() {
     if (mouseIsPressed) {
       for (let i = 0; i < val; i++) {
         rotate(angle);
-        strokeWeight(strokeThickness);
+        let strVal = strSlider.value();
+        strokeWeight(strVal);
         line(mx, my, pmx, pmy);
 
         if (radial == true) {
@@ -81,12 +105,15 @@ function draw() {
       strokeThickness = 5;
     }
   }
-// if(radial == true) {
-//   console.log('symmetry: radial');
-// } else {
-//   console.log('symmetry: rotational');
-// }
-  
+  // if(radial == true) {
+  //   console.log('symmetry: radial');
+  // } else {
+  //   console.log('symmetry: rotational');
+  // }
+  pop();
+  noStroke();
+  fill(220);
+  rect(0, 0, windowWidth, 75);
 }
 
 
